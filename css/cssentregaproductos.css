@@ -1,201 +1,80 @@
-/* Estilo general para el cuerpo */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: white !important;
-}
+<!DOCTYPE html>
+<html lang="es">
 
-/* Estilos para la barra de navegación */
-.navbar {
-    background-color: #333;
-    padding: 10px;
-    /* Flexbox: alinea los enlaces en fila sin necesidad de floats ni clearfix */
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos a Entregar</title>
+    <link rel="stylesheet" type="text/css" href="./css/cssentregaproductos.css">
+</head>
 
-.navbar a {
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    font-size: 17px;
-}
+<body>
 
-/* Cambia el color del fondo y texto de los enlaces cuando se pasa el ratón por encima */
-.navbar a:hover {
-    background-color: #ddd;
-    color: rgb(255, 255, 255);
-}
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <a href="menuinicio.html">Inicio</a>
+        <a href="stockproductos.html">Stock de Productos</a>
+        <a href="productosrecibidos.html">Productos Recibidos</a>
+        <a href="entregarproductos.html">Productos a Entregar</a>
+    </nav>
 
-/* Título */
-h2 {
-    text-align: center;
-    margin: 0;
-    font-size: 24px;
-    background-color: #ADD8E6;
-    padding: 10px;
-}
+    <!-- Contenido principal de la vista -->
+    <main class="main-content">
+        <div>
+            <label for="cupon">Código de descuento:</label>
 
-/* Tabla */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0;
-}
+            <input type="text" id="cupon" placeholder="Ingrese su cupón">
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 16px;
-    text-align: left;
-    vertical-align: middle;
-}
+            <button type="button" onclick="validarCupon()">Aplicar cupón</button>
 
-th {
-    background-color: #4CAF50;
-    color: white;
-}
+            <span id="mensajeCupon"></span>
+        </div>
 
-/* Campos de entrada */
-input[type="text"], input[type="date"], input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
+        <h2>Productos a Entregar</h2>
 
-.price-container {
-    display: flex;
-    align-items: center;
-}
+        <form onsubmit="return saveProduct()">
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Imagen del Producto</th>
+                        <th>Descripción del Producto</th>
+                        <th>Cantidad</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Cliente</th>
+                        <th>Precio de Venta Por Unidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="image-upload">
+                                <input type="file" accept="image/*" onchange="previewImage(event, 'preview')"
+                                    id="fileInput">
+                                <img id="preview" class="preview" alt="" style="display:none;">
+                            </div>
+                        </td>
+                        <td><input type="text" id="productName" placeholder="Nombre del Producto" required></td>
+                        <td><input type="number" id="quantity" placeholder="Cantidad" min="0" required></td>
+                        <td><input type="date" id="deliveryDate" required></td>
+                        <td><input type="text" id="customer" placeholder="Cliente" required></td>
+                        <td>
+                            <div class="price-container">
+                                <span>$</span><input type="number" id="salePrice" placeholder="0.00" min="0" step="0.01"
+                                    required>
+                            </div>
+                        </td>
+                        <td><input type="submit" value="Guardar"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="error" id="errorMessage" style="display:none;">Por favor, complete todos los campos antes de
+                guardar.</p>
+        </form>
+    </main>
 
-.price-container span {
-    margin-right: 5px;
-}
+    <script src="javascript/jsentregaproductos.js"></script> <!-- Asegúrate de que esta ruta sea correcta -->
+    <script src="javascript/jscupon.js"></script>
+</body>
 
-/* Botones */
-input[type="submit"] {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #45a049;
-}
-
-/* Vista previa de la imagen */
-.preview {
-    max-width: 100px;
-    max-height: 100px;
-    margin-top: 10px;
-    display: block;
-}
-
-.image-upload {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-/* Mensaje de error */
-.error {
-    color: red;
-    display: none;
-    text-align: center;
-}
-
-/* Botón de eliminar */
-.delete-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.delete-button:hover {
-    background-color: #e53935;
-}
-
-footer {
-    text-align: center;
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f1f1f1;
-    color: #333;
-}
-
-/* MEDIA QUERIES PARA DISEÑO RESPONSIVO */
-@media (max-width: 768px) {
-    /* Ajuste para la barra de navegación en pantallas pequeñas */
-    .navbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .navbar a {
-        width: 100%;
-        text-align: left;
-    }
-
-    /* Hacer la tabla desplazable horizontalmente en pantallas pequeñas */
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    th, td {
-        font-size: 14px;
-    }
-
-    input[type="text"], input[type="date"], input[type="number"], .price-container {
-        padding: 8px;
-    }
-
-    .preview {
-        max-width: 80px;
-        max-height: 80px;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Ajuste para pantallas aún más pequeñas */
-    h2 {
-        font-size: 20px;
-    }
-
-    input[type="text"], input[type="date"], input[type="number"] {
-        padding: 6px;
-    }
-
-    table, th, td {
-        font-size: 12px;
-        padding: 10px;
-    }
-
-    .preview {
-        max-width: 60px;
-        max-height: 60px;
-    }
-
-    input[type="submit"] {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    /* Asegurar que la tabla sea desplazable horizontalmente en pantallas pequeñas */
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-}
+</html>
